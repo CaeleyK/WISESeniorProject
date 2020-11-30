@@ -1,16 +1,9 @@
 package sample;
 
-import com.sun.deploy.uitoolkit.impl.text.TextConsoleWindow;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -25,28 +18,15 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.control.ScrollBar;
-import org.rosuda.JRI.Rengine;
-import org.rosuda.JRI.RMainLoopCallbacks;
-
 import java.io.*;
-import java.util.Random;
-import java.util.Scanner;
-
-
-//import java.awt.*;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        //ScrollBar scroll = new ScrollBar();
-        //scroll.setOrientation(Orientation.VERTICAL);
-
 
         //create VBox for page
         VBox page = new VBox();
-        //page.getChildren().add(scroll);
         page.setSpacing(200);
         page.setBackground(new Background(new BackgroundFill(Color.AZURE, CornerRadii.EMPTY, Insets.EMPTY)));
         HBox titleBox = new HBox();
@@ -54,71 +34,138 @@ public class Main extends Application {
         //create back button
         Button back = new Button("Back to Homepage");
         titleBox.getChildren().add(back);
-        //bp.setMargin(back, Insets(100));
 
         //create title for page
-        Text title = new Text("Introduction to t-distributions");
+        Text title = new Text("Two Sample Test");
         title.setFont(Font.font ("Verdana", FontWeight.BOLD, 30));
         titleBox.getChildren().add(title);
-        titleBox.setAlignment(Pos.TOP_LEFT);
         page.getChildren().add(titleBox);
 
         //create box for description
         VBox infoBox = new VBox();
-        Text info = new Text("Description of t-distributions");
+        Text info = new Text("Brief Description of two sample test");
         infoBox.getChildren().add(info);
         infoBox.setAlignment(Pos.CENTER);
         page.getChildren().add(infoBox);
 
         //create box for formula
         VBox formulaBox = new VBox();
-        Image formula = new Image(new FileInputStream("/Users/caeleykardell/IdeaProjects/tDistribution/Senior Project/Screen Shot 2020-11-01 at 10.33.45 PM.png"));
+        Image formula = new Image(new FileInputStream("/Users/caeleykardell/IdeaProjects/IndependentSamples/Screen Shot 2020-11-29 at 11.50.29 PM.png"));
         ImageView formula1 = new ImageView(formula);
         formulaBox.getChildren().add(formula1);
         formula1.setPreserveRatio(true);
         formula1.setFitHeight(100);
-        //formula1.setFitWidth(200);
         formulaBox.setAlignment(Pos.CENTER);
         page.getChildren().add(formulaBox);
 
         //graph for interactive aspect
         VBox graphBox = new VBox();
-        Image graph = new Image(new FileInputStream("/Users/caeleykardell/IdeaProjects/tDistribution/Senior Project/My Plot.png"));
+        Image graph = new Image(new FileInputStream("/Users/caeleykardell/IdeaProjects/TwoSampleTests/Screen Shot 2020-11-30 at 12.39.39 PM.png"));
         ImageView graphIV = new ImageView(graph);
         graphBox.getChildren().add(graphIV);
         graphIV.setPreserveRatio(true);
         graphIV.setFitHeight(500);
-        //formula1.setFitWidth(200);
         graphBox.setAlignment(Pos.CENTER);
         page.getChildren().add(graphBox);
 
-        //create interactive aspect
-        Text prompt = new Text("Enter sample size (n): ");
-        javafx.scene.control.TextField t = new TextField();
-        HBox interactiveAspect = new HBox();
-        interactiveAspect.getChildren().add(prompt);
-        interactiveAspect.getChildren().add(t);
-        interactiveAspect.setAlignment(Pos.CENTER);
-        interactiveAspect.setSpacing(10);
-        page.getChildren().add(interactiveAspect);
+        //create interactive aspect input n1
+        Text prompt_n1 = new Text("Enter sample size of sample 1 (n): ");
+        javafx.scene.control.TextField t_n1 = new TextField();
+        HBox interactiveAspect_n1 = new HBox();
+        interactiveAspect_n1.getChildren().add(prompt_n1);
+        interactiveAspect_n1.getChildren().add(t_n1);
+        interactiveAspect_n1.setAlignment(Pos.CENTER_LEFT);
+        interactiveAspect_n1.setSpacing(10);
+        page.getChildren().add(interactiveAspect_n1);
 
-        javafx.scene.control.Button Enter = new javafx.scene.control.Button("Enter");
-        interactiveAspect.getChildren().add(Enter);
-        Enter.setOnMousePressed(event -> runR(t));
-        Enter.setOnKeyPressed(new EventHandler<KeyEvent>() {@Override
-            public void handle(KeyEvent k) {
-                if (k.getCode().equals(KeyCode.ENTER)) {
-                    runR(t);
-                }
+        javafx.scene.control.Button Enter_n1 = new javafx.scene.control.Button("Enter");
+        interactiveAspect_n1.getChildren().add(Enter_n1);
+        Enter_n1.setOnMousePressed(event -> runR(t_n1));
+        Enter_n1.setOnKeyPressed(new EventHandler<KeyEvent>() {@Override
+        public void handle(KeyEvent k) {
+            if (k.getCode().equals(KeyCode.ENTER)) {
+                runR(t_n1);
             }
+        }
         });
-        interactiveAspect.setOnKeyReleased(event -> {if (event.getCode() == KeyCode.ENTER) {runR(t);}});
+        Enter_n1.setOnKeyReleased(event -> {if (event.getCode() == KeyCode.ENTER) {runR(t_n1);}});
 
+
+
+        //create interactive aspect sd1
+        Text prompt_sd1 = new Text("Enter standard deviation of sample 1 (sd): ");
+        javafx.scene.control.TextField t_sd1 = new TextField();
+        //HBox interactiveAspect_sd1 = new HBox();
+        interactiveAspect_n1.getChildren().add(prompt_sd1);
+        interactiveAspect_n1.getChildren().add(t_sd1);
+        // interactiveAspect_sd1.setAlignment(Pos.CENTER_LEFT);
+        //interactiveAspect_sd1.setSpacing(10);
+        //page.getChildren().add(interactiveAspect_sd1);
+
+        javafx.scene.control.Button Enter_sd1 = new javafx.scene.control.Button("Enter");
+        interactiveAspect_n1.getChildren().add(Enter_sd1);
+        Enter_sd1.setOnMousePressed(event -> runR(t_sd1));
+        Enter_sd1.setOnKeyPressed(new EventHandler<KeyEvent>() {@Override
+        public void handle(KeyEvent k) {
+            if (k.getCode().equals(KeyCode.ENTER)) {
+                runR(t_sd1);
+            }
+        }
+        });
+        Enter_sd1.setOnKeyReleased(event -> {if (event.getCode() == KeyCode.ENTER) {runR(t_sd1);}});
+
+        //create interactive aspect input n2
+        Text prompt_n2 = new Text("Enter sample size of sample 2 (n): ");
+        javafx.scene.control.TextField t_n2 = new TextField();
+        HBox interactiveAspect_n2 = new HBox();
+        interactiveAspect_n2.getChildren().add(prompt_n2);
+        interactiveAspect_n2.getChildren().add(t_n2);
+        interactiveAspect_n2.setAlignment(Pos.CENTER_LEFT);
+        interactiveAspect_n2.setSpacing(10);
+        page.getChildren().add(interactiveAspect_n2);
+
+        javafx.scene.control.Button Enter_n2 = new javafx.scene.control.Button("Enter");
+        interactiveAspect_n2.getChildren().add(Enter_n2);
+        Enter_n2.setOnMousePressed(event -> runR(t_n2));
+        Enter_n2.setOnKeyPressed(new EventHandler<KeyEvent>() {@Override
+        public void handle(KeyEvent k) {
+            if (k.getCode().equals(KeyCode.ENTER)) {
+                runR(t_n2);
+            }
+        }
+        });
+        Enter_n2.setOnKeyReleased(event -> {if (event.getCode() == KeyCode.ENTER) {runR(t_n2);}});
+
+
+
+        //create interactive aspect sd2
+        Text prompt_sd2 = new Text("Enter standard deviation of sample 2 (sd): ");
+        javafx.scene.control.TextField t_sd2 = new TextField();
+        //HBox interactiveAspect_sd1 = new HBox();
+        interactiveAspect_n2.getChildren().add(prompt_sd2);
+        interactiveAspect_n2.getChildren().add(t_sd2);
+        // interactiveAspect_sd1.setAlignment(Pos.CENTER_LEFT);
+        //interactiveAspect_sd1.setSpacing(10);
+        //page.getChildren().add(interactiveAspect_sd1);
+
+        javafx.scene.control.Button Enter_sd2 = new javafx.scene.control.Button("Enter");
+        interactiveAspect_n2.getChildren().add(Enter_sd2);
+        Enter_sd2.setOnMousePressed(event -> runR(t_sd2));
+        Enter_sd2.setOnKeyPressed(new EventHandler<KeyEvent>() {@Override
+        public void handle(KeyEvent k) {
+            if (k.getCode().equals(KeyCode.ENTER)) {
+                runR(t_sd2);
+            }
+        }
+        });
+        Enter_sd2.setOnKeyReleased(event -> {if (event.getCode() == KeyCode.ENTER) {runR(t_sd2);}});
+
+
+        //scroll
         ScrollPane sp = new ScrollPane();
         sp.setContent(page);
         sp.setFitToHeight(true);
         sp.setFitToWidth(true);
-        //sp.vbarPolicyProperty(ScrollPane.ScrollBarPolicy );
         //create scene and run stage
         Scene s = new Scene(sp, Color.LIGHTSKYBLUE);
         primaryStage.setMaximized(true);
@@ -137,31 +184,9 @@ public class Main extends Application {
             PrintWriter pw = new PrintWriter(fw);
             pw.println(n.getText());
             pw.close();
-
-            //read file from R
-            //VBox v2 = new VBox();
-            //Image graph2 = new Image(new FileInputStream("/Users/caeleykardell/Desktop/My Plot.png"));
-            //ImageView graphIV2 = new ImageView(graph2);
-            //v2.getChildren().add(graphIV2);
-            //v.getChildren().get(4);
-            //graphBox.getChildren().add(graphIV);
         }
         catch (Exception ex) {
         }
-
-
-
-        //interact with R to create visual
-        String[]  s = new String[]{(String) n.getText()};
-        //Rengine re= new Rengine(s, true, new TextConsole());
-        /*if (!Rengine.versionCheck()) {
-            System.err.println("not right version");
-            System.exit(1);
-        }*/
-    }
-
-    public void interAspect() {
-
     }
 
 
